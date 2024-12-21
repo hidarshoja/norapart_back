@@ -59,7 +59,7 @@ const Product = (sequelize, DataTypes) => {
             defaultValue: "active",
         }
 
-    });
+    },{ tableName: "products",});
 
     return Product;
 }

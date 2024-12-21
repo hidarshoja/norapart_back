@@ -36,7 +36,7 @@ const User = (sequelize, DataTypes) => {
             defaultValue: "active",
         }
 
-    });
+    },{ tableName: "users",});
 
     return User;
 };

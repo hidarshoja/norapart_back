@@ -13,7 +13,7 @@ const RefreshToken =(sequelize,DataTypes) => {
         allowNull: false,
         defaultValue: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
       },
-    });
+    },{ tableName: "refresh_tokens",});
   
     return RefreshToken;
   };

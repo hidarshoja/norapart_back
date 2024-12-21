@@ -21,7 +21,7 @@ const Category = (sequelize, DataTypes) => {
             defaultValue: "active",
         }
 
-    });
+    },{ tableName: "categories",});
 
     return Category;
 }
