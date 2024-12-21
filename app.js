@@ -35,7 +35,7 @@ app.use("/api/category", categoryRoutes);
 // ! start server
 const PORT = process.env.PORT || 5000;
 db.sequelize.sync().then(() => {
-    app.listen(PORT, () => {
+    app.listen(5000, () => {
         console.log(`server is running on port ${PORT}`);
     })
 })
