@@ -3,7 +3,7 @@ import path from 'path';
 
 async function saveImageCategory(base64Image, productName) {
     const __dirname = path.dirname(new URL(import.meta.url).pathname);
-    const normalizedDirname = __dirname.startsWith('/') ? __dirname.slice(1) : __dirname;
+    const normalizedDirname = __dirname.startsWith('/') ? __dirname.slice(2) : __dirname;
     const storagePath = path.resolve(normalizedDirname, '..', 'storage', 'categories');
 
     // Ensure the 'storage/products' directory exists
