@@ -2,19 +2,15 @@ import fs from 'fs';
 import path from 'path';
 
 async function saveImages(base64Images, productName) {
-    const imagePaths = []; 
-    const imagePromises = []; 
+    const imagePromises = [];
 
-    const __dirname = path.dirname(new URL(import.meta.url).pathname);
-    const normalizedDirname = __dirname.startsWith('/') ? __dirname.slice(1) : __dirname;
-    const storagePath = path.resolve(normalizedDirname, '..', 'storage', 'products');
+    const storagePath = path.resolve(process.cwd(), 'storage', 'products');
 
-   
     if (!fs.existsSync(storagePath)) {
         fs.mkdirSync(storagePath, { recursive: true });
     }
 
-  
+
     for (let index = 0; index < base64Images.length; index++) {
         const base64String = base64Images[index];
         const timestamp = Date.now();
@@ -25,7 +21,7 @@ async function saveImages(base64Images, productName) {
             const imageBuffer = Buffer.from(matches[2], 'base64');
             const imagePath = path.join(storagePath, imageName);
 
-           
+
             const imageSavePromise = new Promise((resolve, reject) => {
                 fs.writeFile(imagePath, imageBuffer, (err) => {
                     if (err) {
@@ -33,22 +29,22 @@ async function saveImages(base64Images, productName) {
                         reject(err);
                     } else {
                         console.log('Image saved:', imagePath);
-                        resolve(`/products/${imageName}`); 
+                        resolve(`/products/${imageName}`);
                     }
                 });
             });
 
-          
+
             imagePromises.push(imageSavePromise);
         } else {
             console.error('Invalid base64 string:', base64String);
         }
     }
 
- 
-    const savedImagePaths = await Promise.all(imagePromises); 
 
-    return savedImagePaths; 
+    const savedImagePaths = await Promise.all(imagePromises);
+
+    return savedImagePaths;
 }
 
 export default saveImages;
