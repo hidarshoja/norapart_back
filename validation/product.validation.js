@@ -30,6 +30,13 @@ export const createProductValidation = [
     .isString()
     .withMessage("نوع خودرو بایستی حروف باشد"),
 
+    body("category_id")
+    .trim()
+    .notEmpty()
+    .withMessage("نوع خودرو را وارد کنید")
+    .isString()
+    .withMessage("نوع خودرو بایستی حروف باشد"),
+
   body("brand")
     .trim()
     .notEmpty()
