@@ -5,7 +5,7 @@ async function saveImageCategory(base64Image, productName) {
     const __dirname = path.dirname(new URL(import.meta.url).pathname);
     const normalizedDirname = __dirname.startsWith('/') ? __dirname.slice(2) : __dirname;
     const storagePath = path.resolve(normalizedDirname, '..', 'storage', 'categories');
-
+console.log(storagePath)
     // Ensure the 'storage/products' directory exists
     if (!fs.existsSync(storagePath)) {
         fs.mkdirSync(storagePath, { recursive: true });
