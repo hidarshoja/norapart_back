@@ -13,6 +13,7 @@ async function saveImages(base64Images, productName) {
 
     for (let index = 0; index < base64Images.length; index++) {
         const base64String = base64Images[index];
+        
         const timestamp = Date.now();
         const imageName = `${productName.replace(/\s+/g, '_')}_${timestamp}_${index}.png`;
 
