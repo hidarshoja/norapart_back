@@ -16,9 +16,9 @@ export const signup = async (req, res) => {
 
         // authenticate
         const { accessToken, refreshToken } = generateTokens(user.phone);
-        await storeRefreshToken(user.id, refreshToken);
+        // await storeRefreshToken(user.id, refreshToken);
 
-        setCookies(res, accessToken, refreshToken);
+        // setCookies(res, accessToken, refreshToken);
 
         res.status(201).json({
             message: "کاربر با موفقیت ایجاد شد",
@@ -29,7 +29,8 @@ export const signup = async (req, res) => {
                 email: user.email,
                 phone: user.phone,
                 role: user.role,
-            }
+            },
+            token:accessToken
         });
 
     } catch (error) {
@@ -45,8 +46,8 @@ export const login = async (req, res) => {
 
         if (user && (await comparePassword(req.body.password, user.password))) {
             const { accessToken, refreshToken } = generateTokens(user.phone);
-            await storeRefreshToken(user.id, refreshToken);
-            setCookies(res, accessToken, refreshToken);
+            // await storeRefreshToken(user.id, refreshToken);
+            // setCookies(res, accessToken, refreshToken);
 
             res.json({
                 message: 'ورود با موفقیت انجام شد', user: {
@@ -56,7 +57,8 @@ export const login = async (req, res) => {
                     email: user.email,
                     phone: user.phone,
                     role: user.role,
-                }
+                },
+                token:accessToken
             });
         } else {
             res.status(400).json({ message: "شماره تلفن یا رمز عبور اشتباه است" });

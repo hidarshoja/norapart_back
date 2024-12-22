@@ -3,7 +3,11 @@ import db from "../models/index.js";
 
 export const protectRoute = async (req, res, next) => {
 	try {
-		const accessToken = req.cookies.accessToken;
+		//const accessToken = req.cookies.accessToken;
+
+		const authorization = req.header('Authorization');
+    
+		const accessToken = authorization && authorization.split(' ')[1];
 
 		if (!accessToken) {
 			return res.status(401).json({ message: "توکن ارسالی نامعتبر است" });
