@@ -1,6 +1,7 @@
 import db from '../models/index.js'
 import cloudinary from "../libs/cloudinary.js";
 import { generateSlug } from '../libs/slug.js';
+import saveImages from '../libs/product.upload.js';
 
 export const index = async (req, res) => {
     try {
@@ -45,21 +46,33 @@ export const index = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
+        
         let slug = await generateSlug(req.body.name);
         const products = await db.Product.create({ ...req.body, slug });
 
-        let cloudinaryResponse = null;
-
-        for (const image of req.body.images) {
-            cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
-
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const images = await saveImages(req.body.images, ' products');
+        
+        for (const image of images) {
             await db.ProductImage.create({
-                product_id: products.id,
-                image_url: cloudinaryResponse.secure_url,
-            });
+            product_id: products?.id,
+            image_url: image,
+        });
         }
+        
+        // let cloudinaryResponse = null;
 
-        res.status(201).json({ message: "محصول با موفقیت ایجاد شد", products })
+        // for (const image of req.body.images) {
+        //     cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
+
+        //     await db.ProductImage.create({
+        //         product_id: products.id,
+        //         image_url: cloudinaryResponse.secure_url,
+        //     });
+        // }
+
+        // res.status(201).json({ message: "محصول با موفقیت ایجاد شد", products })
+        res.status(201).json({ message: "محصول با موفقیت ایجاد شد",products })
     } catch (error) {
         console.log(error)
         res.status(400).json(error)

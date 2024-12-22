@@ -7,6 +7,7 @@ import db from './models/index.js';
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
 import categoryRoutes from './routes/category.routes.js';
+import path from 'path';
 
 dotenv.config();
 
@@ -19,6 +20,12 @@ app.use(cors({
     origin: true, 
     credentials: true, 
 }));
+
+// ! static
+const storagePath = path.join('storage', 'products');
+const categoryPath = path.join('storage', 'categories');
+app.use('/products', express.static(storagePath));
+app.use('/categories', express.static(categoryPath));
 
 // ! middleware
 app.use((req, res, next) => {

@@ -1,5 +1,6 @@
 import db from "../models/index.js";
 import cloudinary from "../libs/cloudinary.js";
+import saveImageCategory from "../libs/category.upload.js";
 
 export const index = async (req, res) => {
     try {
@@ -13,17 +14,18 @@ export const index = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
-        
-        let cloudinaryResponse = null;
+        const image_url = await saveImageCategory(req.body.image_url, req.body.name);
 
-      
-            cloudinaryResponse = await cloudinary.uploader.upload(req.body.image_url, { folder: "products" });
+        // let cloudinaryResponse = null;
 
-            const category = await db.Category.create({
-                name: req.body.name,
-                image_url: cloudinaryResponse.secure_url,
-            });
-    
+
+        //     cloudinaryResponse = await cloudinary.uploader.upload(req.body.image_url, { folder: "products" });
+
+        const category = await db.Category.create({
+            name: req.body.name,
+            image_url
+        });
+
 
         res.status(201).json({ message: "دسته بندی با موفقیت ایجاد شد", category })
     } catch (error) {
