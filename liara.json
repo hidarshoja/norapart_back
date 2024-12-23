@@ -1,4 +1,13 @@
 {
+  "disks": [
+    {
+      "name": "products",
+      "mountTo": "storage/products"
+    },
+    {
+      "name": "category",
+      "mountTo": "storage/categories"
+    }
+  ],
   "port": 5000
-
 }
