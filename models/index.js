@@ -18,6 +18,8 @@ const sequelize = new Sequelize(
   { host: conf.host, dialect: conf.dialect , logging: conf.logging, timezone: conf.timezone}
 );
 
+sequelize.sync({ alter: true });
+
 const db = {};
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
