@@ -49,7 +49,7 @@ export const create = async (req, res) => {
         
         let slug = await generateSlug(req.body.name);
         const products = await db.Product.create({ ...req.body, slug });
-console.log(req.body.images)
+
         await new Promise(resolve => setTimeout(resolve, 2000));
         const images = await saveImages(req.body.images, ' products');
         
