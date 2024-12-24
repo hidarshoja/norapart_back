@@ -2,6 +2,8 @@ import db from '../models/index.js'
 import cloudinary from "../libs/cloudinary.js";
 import { generateSlug } from '../libs/slug.js';
 import saveImages from '../libs/product.upload.js';
+import path from "path";
+import fs from 'fs'
 
 export const index = async (req, res) => {
     try {
@@ -60,19 +62,7 @@ export const create = async (req, res) => {
             image_url: image,
         });
         }
-        
-        // let cloudinaryResponse = null;
 
-        // for (const image of req.body.images) {
-        //     cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
-
-        //     await db.ProductImage.create({
-        //         product_id: products.id,
-        //         image_url: cloudinaryResponse.secure_url,
-        //     });
-        // }
-
-        // res.status(201).json({ message: "محصول با موفقیت ایجاد شد", products })
         res.status(201).json({ message: "محصول با موفقیت ایجاد شد",products })
     } catch (error) {
         console.log(error)
@@ -104,5 +94,108 @@ export const show = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(400).json(error)
+    }
+}
+
+// delete a product
+export const destroy = async(req,res)=>{
+    try{
+        const {slug} = req.params
+        const product = await db.Product.findOne({
+            where: {slug},
+        })
+
+        if (!product){
+            return res.status(404).json({message: 'محصولی یافت نشد'});
+        }
+        const images = await db.ProductImage.findAll({where : {product_id:product.id}})
+
+        // Delete each image file
+        for (const image of images) {
+            const imagePath = `${process.cwd()}/storage${image?.image_url}`// Adjust this path if necessary
+            if (fs.existsSync(imagePath)) {
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.error('Error deleting file:', imagePath, err);
+                    } else {
+                        console.log('Deleted file:', imagePath);
+                    }
+                });
+            } else {
+                console.log('File not found:', imagePath);
+            }
+        }
+        await db.ProductImage.destroy({ where: { product_id: product.id } });
+
+        await db.Product.destroy({ where: { id: product.id } });
+
+        return res.status(200).json({ message: 'محصول و تصاویر مربوطه با موفقیت حذف شدند' });
+
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+// edit a product
+export const update = async(req,res)=>{
+    const {slug} = req.params
+    const product = await db.Product.findOne({
+        where: {slug},
+    })
+
+    if (!product){
+        return res.status(404).json({message: 'محصولی یافت نشد'});
+    }
+
+    if (req.body.images.length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const images = await saveImages(req.body.images, ' products');
+
+
+        for (const image of images) {
+            await db.ProductImage.create({
+                product_id: product?.id,
+                image_url: image,
+            });
+        }
+    }
+
+
+    product.update(req.body)
+
+    return res.status(200).json({message: 'محصول با موفقیت ویرایش  شد'})
+
+}
+
+//! delete a image
+export const destroyImage = async(req,res)=>{
+    const {id} = req.params
+    try{
+        const image = await db.ProductImage.findOne({
+            where:{
+                id
+            }
+        })
+
+        if (!image) {
+            return res.status(404).json({message: 'عکسی یافت نشد'})
+        }
+        const imagePath = `${process.cwd()}/storage${image?.image_url}`// Adjust this path if necessary
+        if (fs.existsSync(imagePath)) {
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.error('Error deleting file:', imagePath, err);
+                } else {
+                    console.log('Deleted file:', imagePath);
+                }
+            });
+        } else {
+            console.log('File not found:', imagePath);
+        }
+        image.destroy()
+        return res.status(200).json({message: 'عکسی با موفقیت پاک گردید'})
+
+    }catch (e) {
+        console.log(e)
     }
 }

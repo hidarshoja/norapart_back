@@ -1,9 +1,8 @@
 import express from 'express'
-import {index,create,show} from '../controllers/product.controller.js'
+import {index,create,show,destroy,update,destroyImage} from '../controllers/product.controller.js'
 import { adminRoute, protectRoute } from '../middlewares/auth.middleware.js'
-import { createProductValidation } from '../validation/product.validation.js'
+import {createProductValidation, updateProductValidation} from '../validation/product.validation.js'
 import { handleValidationErrors } from '../middlewares/validate.middleware.js'
-import upload from '../libs/product.upload.js'
 
 const router = express.Router()
 
@@ -18,6 +17,11 @@ router.post(
     handleValidationErrors,
     create
 )
+
+router.delete('/:slug', protectRoute,adminRoute, destroy)
+router.delete('/image/delete/:id/', protectRoute,adminRoute, destroyImage)
+
+router.patch('/:slug', protectRoute,adminRoute, updateProductValidation,handleValidationErrors,update)
 
 
 export default router
