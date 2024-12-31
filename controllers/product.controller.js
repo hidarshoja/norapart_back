@@ -7,16 +7,12 @@ import fs from 'fs'
 
 export const index = async (req, res) => {
     try {
-        const { page = 1, limit = 10 } = req.query;
+        const { page = 1, limit = 10, all = false } = req.query;
 
-        const pageNumber = parseInt(page);
-        const limitNumber = parseInt(limit);
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
 
-        const offset = (pageNumber - 1) * limitNumber;
-
-        const products = await db.Product.findAndCountAll({
-            limit: limitNumber,
-            offset: offset,
+        const queryOptions = {
             order: [['createdAt', 'DESC']],
             include: [
                 {
@@ -27,24 +23,32 @@ export const index = async (req, res) => {
                 {
                     model: db.ProductImage,
                     as: 'images',
-                    attributes: ['id', 'image_url'],
-                },
+                    attributes: ['id', 'image_url']
+                }
             ],
-        });
+        };
 
 
-        res.json({
+        if (!all) {
+            queryOptions.limit = limitNumber;
+            queryOptions.offset = (pageNumber - 1) * limitNumber;
+        }
+
+        const products = await db.Product.findAndCountAll(queryOptions);
+
+        return res.json({
             products: products.rows,
             totalCount: products.count,
-            totalPages: Math.ceil(products.count / limitNumber),
-            currentPage: pageNumber,
-            limit: limitNumber,
+            totalPages: all ? 1 : Math.ceil(products.count / limitNumber),
+            currentPage: all ? 1 : pageNumber,
+            limit: all ? products.count : limitNumber,
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching products', error: error.message });
     }
-}
+};
+
 
 export const create = async (req, res) => {
     try {

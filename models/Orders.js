@@ -45,9 +45,9 @@ const Order = (sequelize, DataTypes) => {
         },
 
         statuse: {
-            type: DataTypes.ENUM("published", "inactive"),
+            type: DataTypes.ENUM("ثبت","پرداخت","پرداخت ناموفق","درحال پردازش","لغو","ارسال شد"),
             allowNull: false,
-            defaultValue: "published",
+            defaultValue: "ثبت",
         }
 
     },{ tableName: "orders",});

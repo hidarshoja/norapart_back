@@ -1,13 +1,19 @@
 import express from 'express'; 
 import cors from 'cors';
 import cookieParser from "cookie-parser";
+import path from 'path';
 import dotenv from 'dotenv';
 import db from './models/index.js';
 
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
 import categoryRoutes from './routes/category.routes.js';
-import path from 'path';
+import provinceRoutes from './routes/province.routes.js';
+import orderRoutes from './routes/order.routes.js';
+import settingRoutes from './routes/setting.routes.js';
+
+
+
 
 dotenv.config();
 
@@ -37,6 +43,9 @@ app.use((req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/province", provinceRoutes);
+app.use("/api/order", orderRoutes);
+app.use("/api/setting", settingRoutes);
 
 
 // ! start server

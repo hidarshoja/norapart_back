@@ -10,7 +10,7 @@ const TotalPrice = (sequelize, DataTypes) => {
         
         address_id: {
             type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: 'addresses', // Name of the table for Documents
                 key: 'id', // Field in Documents to reference
