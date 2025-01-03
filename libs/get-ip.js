@@ -1,4 +1,5 @@
 import os from 'os'
+import crypto from 'crypto'
 
 export const getLocalIPAddress = () => {
     const networkInterfaces = os.networkInterfaces();
@@ -28,3 +29,18 @@ export function getMacAddress() {
   
     return "MAC Address not found";
   }
+
+
+export function generateHardwareHash() {
+    const data = [
+        os.cpus()[0].model, // CPU model
+        os.totalmem(),      // Total memory
+        os.platform(),      // Platform (e.g., Linux, Windows)
+        os.arch(),          // Architecture (e.g., x64)
+    ].join("-");
+
+    // Create a SHA256 hash
+    const hash = crypto.createHash("sha256").update(data).digest("base64");
+    console.log("Hardware Hash:", hash);
+    return hash;
+}
