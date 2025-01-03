@@ -12,6 +12,7 @@ import provinceRoutes from './routes/province.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import settingRoutes from './routes/setting.routes.js';
 import userRoutes from "./routes/user.routes.js";
+import questionRoutes from "./routes/question.routes.js";
 
 
 
@@ -48,6 +49,7 @@ app.use("/api/province", provinceRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/setting", settingRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/question", questionRoutes);
 
 
 // ! start server
