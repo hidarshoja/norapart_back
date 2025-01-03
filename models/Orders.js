@@ -39,10 +39,6 @@ const Order = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        ref_code:{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
 
         statuse: {
             type: DataTypes.ENUM("ثبت","پرداخت","پرداخت ناموفق","درحال پردازش","لغو","ارسال شد"),

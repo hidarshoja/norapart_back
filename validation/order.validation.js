@@ -36,3 +36,11 @@ export const createOrdersValidation = [
         .isLength({ min: 11, max: 11 }).withMessage("شماره تلفن باید 11 رقم باشد")
         .matches(/^[0-9]+$/).withMessage("شماره تلفن باید فقط شامل اعداد باشد"),
 ];
+
+export const refUpdateOrderValidation = [
+    body("ref_code")
+        .trim()
+        .notEmpty()
+        .withMessage('کد رهگیری را وارد کنید')
+        .matches(/^[0-9]+$/).withMessage("کد رهگیری باید فقط شامل اعداد باشد"),
+]

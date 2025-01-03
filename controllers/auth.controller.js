@@ -49,6 +49,10 @@ export const login = async (req, res) => {
             // await storeRefreshToken(user.id, refreshToken);
             // setCookies(res, accessToken, refreshToken);
 
+            if(user.statuse == 'inactive'){
+                return res.status(401).json({message: 'دسترسی شما محدود شده است'})
+            }
+
             res.json({
                 message: 'ورود با موفقیت انجام شد', user: {
                     id: user.id,

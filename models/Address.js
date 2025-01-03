@@ -44,11 +44,15 @@ const Address = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        
+
+        ref_code:{
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         statuse: {
-            type: DataTypes.ENUM("published", "inactive"),
+            type: DataTypes.ENUM("ثبت","پرداخت","پرداخت ناموفق","درحال پردازش","لغو","ارسال شد"),
             allowNull: false,
-            defaultValue: "published",
+            defaultValue: "ثبت",
         }
 
     }, { tableName: "addresses", });

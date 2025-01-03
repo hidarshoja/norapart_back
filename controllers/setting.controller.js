@@ -2,6 +2,7 @@ import db from "../models/index.js";
 import {Op,Sequelize } from "sequelize";
 import {getLocalIPAddress} from "../libs/get-ip.js";
 import moment from 'moment'
+import {getStartOfDay, getStartOfMonthPersian} from "../libs/get-time.js";
 
 export const createViews = async(req,res)=>{
     try {
@@ -37,12 +38,8 @@ export const createViews = async(req,res)=>{
 //! get count of view in ip address
 export const getDailyIpCounts = async (req,res) => {
     try {
-
         const date30DaysAgo = moment().subtract(30, 'days').format('YYYY-MM-DD 00:00:00'); // Start date
-        const today = moment().format('YYYY-MM-DD 00:00:00');
-
-        console.log('date30DaysAgo',date30DaysAgo)
-        console.log('today',today)
+        const today = moment().format('YYYY-MM-DD 23:59:59');
 
         const results = await db.IpAddress.findAll({
             attributes: [
@@ -80,3 +77,46 @@ export const getDailyIpCounts = async (req,res) => {
         console.error('Error fetching daily IP counts:', error);
     }
 };
+
+// ! get income by day,month,year
+export const getIncome = async (req,res) => {
+    try {
+        // Calculate total price for today
+        const todayStart = getStartOfDay();
+        const totalPriceToday = await db.TotalPrice.sum('total_price', {
+            where: {
+                createdAt: {
+                    [Op.gte]: todayStart,
+                },
+            },
+        });
+
+        // Calculate total price for the current month
+        const monthStart = getStartOfMonthPersian();
+        const totalPriceMonth = await db.TotalPrice.sum('total_price', {
+            where: {
+                createdAt: {
+                    [Op.gte]: monthStart,
+                },
+            },
+        });
+
+        // Calculate total price for all time
+        const totalPriceAll = await db.TotalPrice.sum('total_price');
+
+        const users = await db.User.count({where:{
+            role:"user"
+            }});
+
+        // Respond with all results
+        res.json({
+            totalPriceToday: totalPriceToday || 0,
+            totalPriceMonth: totalPriceMonth || 0,
+            totalPriceAll: totalPriceAll || 0,
+            users
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+}

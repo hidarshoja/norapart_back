@@ -11,6 +11,7 @@ import categoryRoutes from './routes/category.routes.js';
 import provinceRoutes from './routes/province.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import settingRoutes from './routes/setting.routes.js';
+import userRoutes from "./routes/user.routes.js";
 
 
 
@@ -46,6 +47,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/province", provinceRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/setting", settingRoutes);
+app.use("/api/user", userRoutes);
 
 
 // ! start server

@@ -42,7 +42,7 @@ const defineRelations = (db) => {
   db.Order.belongsTo(db.TotalPrice, {
     foreignKey: 'total_price_id',
     targetKey: 'id',
-    as: 'total_prices'
+    as: 'total_price'
   });
 
   db.TotalPrice.hasMany(db.Order, {
@@ -50,6 +50,20 @@ const defineRelations = (db) => {
     sourceKey: 'id',
     as: 'orders'
   });
+
+  db.Order.belongsTo(db.Product, {
+    foreignKey: 'product_id',
+    sourceKey: 'id',
+    as: 'product' });
+
+  db.TotalPrice.belongsTo(db.Address, {
+    foreignKey: 'address_id',
+    as: 'address' });
+
+  db.Address.belongsTo(db.City, { foreignKey: 'city_id', as: 'city' });
+  db.Address.belongsTo(db.Province, { foreignKey: 'province_id', as: 'province' });
+  db.Address.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
+
 
 };
 

@@ -38,3 +38,4 @@ export const validateLogin = [
     .trim()
     .isLength({ min: 6, max: 20 }).withMessage("رمز عبور باید بین 6 تا 20 کاراکتر باشد"),
 ];
+

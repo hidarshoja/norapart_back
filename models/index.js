@@ -14,6 +14,7 @@ import Order from './Orders.js';
 import Address from './Address.js';
 import TotalPrice from './TotalPrice.js';
 import IpAddress from "./IpAddress.js";
+import Question from "./Question.js";
 
 const conf = config.development;
 
@@ -42,7 +43,7 @@ db.Order = Order(sequelize, DataTypes);
 db.Address = Address(sequelize, DataTypes);
 db.TotalPrice = TotalPrice(sequelize, DataTypes);
 db.IpAddress = IpAddress(sequelize,DataTypes)
-
+db.Question = Question(sequelize, DataTypes)
 // ! relations
 defineRelations(db)
 
