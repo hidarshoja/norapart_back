@@ -7,7 +7,7 @@ import {getStartOfDay, getStartOfMonthPersian} from "../libs/get-time.js";
 export const createViews = async(req,res)=>{
     try {
        // const ipAddress = getLocalIPAddress()
-       const ipAddress = generateHardwareHash()
+       const ipAddress = req.body.unique_id
 
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
