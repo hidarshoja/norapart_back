@@ -1,12 +1,13 @@
 import db from "../models/index.js";
 import {Op,Sequelize } from "sequelize";
-import {getLocalIPAddress} from "../libs/get-ip.js";
+import {getLocalIPAddress, getMacAddress} from "../libs/get-ip.js";
 import moment from 'moment'
 import {getStartOfDay, getStartOfMonthPersian} from "../libs/get-time.js";
 
 export const createViews = async(req,res)=>{
     try {
-        const ipAddress = getLocalIPAddress()
+       // const ipAddress = getLocalIPAddress()
+       const ipAddress = getMacAddress()
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
         const todayEnd = new Date();

@@ -1,5 +1,5 @@
 import db from "../models/index.js";
-import {createOrders, getAllOrders} from "../services/order.services.js";
+import {createOrders, getAllOrders} from "../services/order.service.js";
 
 // ! get all orders
 export const index = async(req,res)=>{

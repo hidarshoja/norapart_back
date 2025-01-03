@@ -12,3 +12,19 @@ export const getLocalIPAddress = () => {
     return 'Unable to determine local IP';
 };
 
+export function getMacAddress() {
+    const networkInterfaces = os.networkInterfaces();
+  
+    for (const interfaceName in networkInterfaces) {
+      const interfaces = networkInterfaces[interfaceName];
+  
+      for (const iface of interfaces) {
+        // Ensure the interface is not internal (e.g., loopback)
+        if (!iface.internal && iface.mac) {
+          return iface.mac;
+        }
+      }
+    }
+  
+    return "MAC Address not found";
+  }
