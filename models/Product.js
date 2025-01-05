@@ -58,6 +58,11 @@ const Product = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: "inactive",
         },
+        amount:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 0,
+        },
         statuse: {
             type: DataTypes.ENUM("active", "inactive"),
             allowNull: false,

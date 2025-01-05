@@ -13,6 +13,28 @@ const defineRelations = (db) => {
     as: 'categories'
   });
 
+
+  db.ProductComment.belongsTo(db.Product, {
+    foreignKey: "product_id",
+    as: "product",
+  });
+
+
+  db.ProductComment.belongsTo(db.User, {
+    foreignKey: "user_id",
+    as: "user",
+  });
+
+  db.Product.hasMany(db.ProductComment, {
+    foreignKey: "product_id",
+    as: "comments",
+  });
+
+  db.User.hasMany(db.ProductComment, {
+    foreignKey: "user_id",
+    as: "users",
+  });
+
   // ! relations between products and images
   db.Product.hasMany(db.ProductImage, {
     foreignKey: 'product_id',
@@ -64,6 +86,31 @@ const defineRelations = (db) => {
   db.Address.belongsTo(db.Province, { foreignKey: 'province_id', as: 'province' });
   db.Address.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
 
+// ! relation between blogs and comment
+  db.BlogComment.belongsTo(db.Blog, {
+    foreignKey: 'blog_id',
+    targetKey: 'id',
+    as: 'blogs',
+  });
+
+  db.Blog.hasMany(db.BlogComment, {
+    foreignKey: 'blog_id',
+    sourceKey: 'id',
+    as: 'comments',
+  });
+
+  //! relation between comments and reply
+  db.BlogReplyComment.belongsTo(db.BlogComment, {
+    foreignKey: 'comment_id',
+    targetKey: 'id',
+    as: 'comment',
+  });
+
+  db.BlogComment.hasMany(db.BlogReplyComment, {
+    foreignKey: 'comment_id',
+    sourceKey: 'id',
+    as: 'replies',
+  });
 
 };
 

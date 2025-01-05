@@ -32,12 +32,7 @@ export const show = async(req,res) => {
 // ! create a category
 export const create = async (req, res) => {
     try {
-        const image_url = await saveImageCategory(req.body.image_url, req.body.name);
-
-        // let cloudinaryResponse = null;
-
-
-        //     cloudinaryResponse = await cloudinary.uploader.upload(req.body.image_url, { folder: "products" });
+        const image_url = await saveImageCategory(req.body.image_url, req.body.name, 'categories');
 
         const category = await db.Category.create({
             name: req.body.name,

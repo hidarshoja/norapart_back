@@ -13,7 +13,9 @@ import orderRoutes from './routes/order.routes.js';
 import settingRoutes from './routes/setting.routes.js';
 import userRoutes from "./routes/user.routes.js";
 import questionRoutes from "./routes/question.routes.js";
-
+import blogRoutes from "./routes/blog.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
+import ProductCommentRoutes from "./routes/product-comment.routes.js";
 
 
 
@@ -50,7 +52,9 @@ app.use("/api/order", orderRoutes);
 app.use("/api/setting", settingRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/question", questionRoutes);
-
+app.use("/api/blog", blogRoutes);
+app.use("/api/comment", commentRoutes);
+app.use("/api/product-comment", ProductCommentRoutes);
 
 // ! start server
 const PORT = process.env.PORT || 5000;

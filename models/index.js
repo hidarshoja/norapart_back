@@ -15,6 +15,11 @@ import Address from './Address.js';
 import TotalPrice from './TotalPrice.js';
 import IpAddress from "./IpAddress.js";
 import Question from "./Question.js";
+import Blog from "./Blog.js";
+import BlogComment from "./BlogComment.js";
+import BlogReplyComment from "./BlogReplyComment.js";
+import ProductComment from "./ProductComment.js";
+import Contact from "./Contact.js";
 
 const conf = config.development;
 
@@ -44,6 +49,12 @@ db.Address = Address(sequelize, DataTypes);
 db.TotalPrice = TotalPrice(sequelize, DataTypes);
 db.IpAddress = IpAddress(sequelize,DataTypes)
 db.Question = Question(sequelize, DataTypes)
+db.Blog = Blog(sequelize, DataTypes)
+db.BlogComment = BlogComment(sequelize, DataTypes)
+db.BlogReplyComment = BlogReplyComment(sequelize, DataTypes)
+db.ProductComment = ProductComment(sequelize, DataTypes)
+db.Contact = Contact(sequelize, DataTypes)
+
 // ! relations
 defineRelations(db)
 

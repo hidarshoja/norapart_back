@@ -24,6 +24,20 @@ export const index = async (req, res) => {
                     model: db.ProductImage,
                     as: 'images',
                     attributes: ['id', 'image_url']
+                },
+                {
+                    model: db.ProductComment,
+                    as: 'comments',
+                    attributes: ['id', 'body', 'rate', 'createdAt'],
+                    where: { status: 'published' },
+                    required: false, // Allow products with no published comments
+                    include: [
+                        {
+                            model: db.User,
+                            as: 'user',
+                            attributes: ['id', 'first_name', 'last_name']
+                        }
+                    ]
                 }
             ],
         };

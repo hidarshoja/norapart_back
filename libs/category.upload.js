@@ -3,10 +3,10 @@ import path from 'path';
 
 
 
-async function saveImageCategory(base64Image, productName) {
+async function saveImageCategory(base64Image, productName,folderName) {
 
 
-    const storagePath = path.resolve(process.cwd(), 'storage', 'categories');
+    const storagePath = path.resolve(process.cwd(), 'storage', folderName);
    
     // Ensure the 'storage/products' directory exists
     if (!fs.existsSync(storagePath)) {
@@ -29,7 +29,7 @@ async function saveImageCategory(base64Image, productName) {
                     reject(err);
                 } else {
                     console.log('Image saved:', imagePath);
-                    resolve(`/categories/${imageName}`); // Return the relative image path as a string
+                    resolve(`/${folderName}/${imageName}`); // Return the relative image path as a string
                 }
             });
         });
