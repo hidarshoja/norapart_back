@@ -19,6 +19,10 @@ const Contact = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        reply: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         status: {
             type: DataTypes.ENUM("waiting", "awnsered"),
             allowNull: false,

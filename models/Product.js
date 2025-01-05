@@ -19,6 +19,10 @@ const Product = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        description: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         price_with_off: {
             type: DataTypes.STRING,
             allowNull: true,

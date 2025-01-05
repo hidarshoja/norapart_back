@@ -16,6 +16,7 @@ import questionRoutes from "./routes/question.routes.js";
 import blogRoutes from "./routes/blog.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import ProductCommentRoutes from "./routes/product-comment.routes.js";
+import contactRoutes from "./routes/contact.routes.js";
 
 
 
@@ -55,6 +56,7 @@ app.use("/api/question", questionRoutes);
 app.use("/api/blog", blogRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/product-comment", ProductCommentRoutes);
+app.use("/api/contact", contactRoutes);
 
 // ! start server
 const PORT = process.env.PORT || 5000;
