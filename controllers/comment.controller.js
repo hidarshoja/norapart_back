@@ -21,10 +21,10 @@ export const index = async(req, res) => {
 }
 
 export const create = async(req, res) => {
-    const {user_name,body,blog_id} = req.body
+    const {username,body,blog_id} = req.body
     try {
         const blog = await db.BlogComment.create({
-            user_name,
+            username,
             body,
             blog_id
         })

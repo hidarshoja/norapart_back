@@ -2,11 +2,12 @@ import db from "../models/index.js";
 
 export const getAllOrders = async(db)=>{
     const totalPrices = await db.TotalPrice.findAll({
+        order: [['createdAt', 'desc']],
         include: [
             {
                 model: db.Address,
                 as: 'address', // Alias for the Address model
-                attributes: ['id', 'address', 'phone', 'postal_code'], // Select specific address fields
+                attributes: ['id', 'address', 'phone', 'postal_code','statuse','createdAt','ref_code'], // Select specific address fields
                 include: [
                     {
                         model: db.City, // City model
@@ -28,7 +29,7 @@ export const getAllOrders = async(db)=>{
             {
                 model: db.Order,
                 as: 'orders', // Alias for the Order model
-                attributes: [ 'amount', 'price', 'statuse'], // Include order fields
+                attributes: [ 'amount', 'price'], // Include order fields
                 include: [
                     {
                         model: db.Product, // Product model
@@ -45,7 +46,7 @@ export const getAllOrders = async(db)=>{
                 ],
             },
         ],
-        attributes: ['id', 'total_price']
+        attributes: ['id', 'total_price'],
     });
 
     return totalPrices

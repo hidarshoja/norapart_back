@@ -35,8 +35,11 @@ app.use(cors({
 // ! static
 const storagePath = path.join('storage', 'products');
 const categoryPath = path.join('storage', 'categories');
+const blogPath = path.join('storage', 'blogs');
+
 app.use('/products', express.static(storagePath));
 app.use('/categories', express.static(categoryPath));
+app.use('/blogs', express.static(blogPath));
 
 // ! middleware
 app.use((req, res, next) => {

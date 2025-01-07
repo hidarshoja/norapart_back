@@ -1,14 +1,16 @@
 import db from '../models/index.js'
 import bcrypt from "bcryptjs";
 import {userExistById} from "../services/user.service.js";
+import {Op} from "sequelize";
 
 // ! get all users info
 export const index = async (req, res) => {
     const { page=1,limit=10,all=false } = req.params;
+    const user_id = req.user.id;
     const attributes = { exclude: ['password','createdAt','updatedAt'] };
     try{
         if (all === 'true') {
-            const users = await db.User.findAll({where:{role:'user'},attributes}); // Fetch all users
+            const users = await db.User.findAll({where:{id: {[Op.ne]: user_id}},attributes}); // Fetch all users
             return res.status(200).send(users);
         }
 
@@ -17,7 +19,7 @@ export const index = async (req, res) => {
         const { rows: users, count: total } = await db.User.findAndCountAll({
             offset: parseInt(offset, 10),
             limit: parseInt(limit, 10),
-            where:{role:'user'},
+            where:{id: {[Op.ne]: user_id}},
             attributes
         });
 

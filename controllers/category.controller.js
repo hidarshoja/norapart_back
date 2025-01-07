@@ -116,7 +116,7 @@ export const update = async(req,res)=>{
         console.log('File not found:', imagePath);
     }
 
-    const image_url = await saveImageCategory(req.body.image_url, req.body.name);
+    const image_url = await saveImageCategory(req.body.image_url, req.body.name,'categories');
 
      category.update({
         name: req.body.name,

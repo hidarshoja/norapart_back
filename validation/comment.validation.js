@@ -26,9 +26,9 @@ export const commentVaalidtion = [
     body("body")
         .trim()
         .notEmpty()
-        .withMessage("جواب سوال  را وارد کنید.")
+        .withMessage("کامنت  را وارد کنید.")
         .isString()
-        .withMessage("موضوع سوال به صورت فارسی است"),
+        .withMessage("کامنت به صورت فارسی است"),
 ];
 
 

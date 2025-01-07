@@ -1,7 +1,7 @@
 import {body} from "express-validator";
 
 //! Define the allowed fields
-const allowedFields = ["name", "body",  "category","body"];
+const allowedFields = ["name", "body",  "category","image_url"];
 
 export const addBlogValidation = [
     (req, res, next) => {
@@ -73,7 +73,6 @@ export const updateBlogValidation = [
     body("image_url")
         .optional() // Makes the field optional
         .trim()
-        .notEmpty().withMessage("عکس نمی‌تواند خالی باشد")
         .isString().withMessage("عکس باید از نوع رشته باشد"),
 
     body("category")

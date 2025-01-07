@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', index)
 
 router.post('/', protectRoute,adminRoute,commentVaalidtion,handleValidationErrors,create)
-router.post('/', protectRoute,adminRoute,replyCommentValidation,handleValidationErrors,reply)
+router.post('/reply', protectRoute,adminRoute,replyCommentValidation,handleValidationErrors,reply)
 
 router.patch('/:comment_id', protectRoute,adminRoute, update)
 

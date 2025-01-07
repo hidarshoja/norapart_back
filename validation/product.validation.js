@@ -15,7 +15,20 @@ export const createProductValidation = [
     .isNumeric()
     .withMessage("قیمت محصول به صورت عدد است"),
 
-  
+  body("description")
+      .trim()
+      .notEmpty()
+      .withMessage("توضیحات محصول را وارد کنید.")
+      .isString()
+      .withMessage("توضیحات محصول به صورت فارسی است"),
+
+  body("amount")
+      .trim()
+      .notEmpty()
+      .withMessage("موجودی محصول را وارد کنید.")
+      .isNumeric()
+      .withMessage("موجودی محصول به صورت عدد است"),
+
 
   body("category_id")
     .notEmpty()
@@ -75,7 +88,20 @@ export const updateProductValidation = [
       .withMessage("قیمت محصول را وارد کنید.")
       .isNumeric()
       .withMessage("قیمت محصول به صورت عدد است"),
+    
+  body("description")
+      .trim()
+      .notEmpty()
+      .withMessage("توضیحات محصول را وارد کنید.")
+      .isString()
+      .withMessage("توضیحات محصول به صورت فارسی است"),
 
+  body("amount")
+      .trim()
+      .notEmpty()
+      .withMessage("موجودی محصول را وارد کنید.")
+      .isNumeric()
+      .withMessage("موجودی محصول به صورت عدد است"),
 
   body("category_id")
       .notEmpty()
