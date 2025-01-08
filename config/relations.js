@@ -98,7 +98,6 @@ const defineRelations = (db) => {
     sourceKey: 'id',
     as: 'comments',
   });
-
   //! relation between comments and reply
   db.BlogReplyComment.belongsTo(db.BlogComment, {
     foreignKey: 'comment_id',

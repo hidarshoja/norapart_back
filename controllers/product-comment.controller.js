@@ -8,6 +8,17 @@ export const index = async(req, res) => {
                 order:  [['createdAt','desc']],
                 limit: parseInt(limit),
                 offset: parseInt(offset),
+                include: [{
+                    model: db.Product,
+                    as:'product',
+                    attributes: ['name']
+                },
+                    {
+                        model: db.User,
+                        as:'user',
+                        attributes: ['first_name','last_name']
+                    }
+                ]
             })
         return res.status(200).json({
             comments: comments.rows, // Fetched comments
@@ -24,6 +35,7 @@ export const index = async(req, res) => {
 }
 
 export const create = async(req, res) => {
+    console.log(req.body)
     try {
         const comments = await db.ProductComment.create(req.body)
 

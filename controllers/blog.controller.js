@@ -34,6 +34,7 @@ export const show = async (req, res) => {
                     attributes: [
                         'username',
                         'body',
+                        'status',
                         'updatedAt',
                     ],
                     include: [

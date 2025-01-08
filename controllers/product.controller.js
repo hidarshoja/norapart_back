@@ -1,9 +1,9 @@
 import db from '../models/index.js'
-import cloudinary from "../libs/cloudinary.js";
 import { generateSlug } from '../libs/slug.js';
 import saveImages from '../libs/product.upload.js';
-import path from "path";
 import fs from 'fs'
+import { Sequelize, Op } from "sequelize";
+
 
 export const index = async (req, res) => {
     try {
@@ -90,7 +90,6 @@ export const create = async (req, res) => {
 
 // ! show product by slug
 export const show = async (req, res) => {
-    console.log(req.params.slug)
     try {
         const product = await db.Product.findOne({
             where: { slug: req.params.slug }, 
@@ -105,10 +104,55 @@ export const show = async (req, res) => {
                   as: 'images', 
                   attributes: ['id', 'image_url'], 
                 },
+                {
+                    model: db.ProductComment,
+                    as: 'comments',
+                    attributes: ['body','rate','status','createdAt'],
+                    include:[{
+                        model:db.User,
+                        as:'user',
+                        attributes: ['first_name','last_name']
+                    }]
+                },
               ],
         });
+
+        const data = await db.ProductComment.findAll({
+            where: { product_id:product.id }, // Filter by product_id
+            attributes: [
+                [Sequelize.fn("AVG", Sequelize.col("rate")), "average"], // Calculate average rating
+                [Sequelize.fn("COUNT", Sequelize.col("id")), "totalCount"], // Total count of reviews
+                [Sequelize.col("rate"), "rating"], // Group by rate
+                [Sequelize.fn("COUNT", Sequelize.col("rate")), "count"], // Count for each rating
+            ],
+            group: ["rate"], // Group results by `rate`
+            raw: true, // Return raw data
+        });
+
+        // Prepare response
+        const totalCount = data.reduce((acc, cur) => acc + Number(cur.count), 0);
+
+        // Calculate average
+        const average = data.reduce(
+            (acc, cur) => acc + Number(cur.rating) * Number(cur.count),
+            0
+        ) / totalCount;
+
+        // Initialize counts for all ratings (1 to 5)
+        const counts = [1, 2, 3, 4, 5].map((rating) => ({
+            rating,
+            count: data.find((d) => Number(d.rating) === rating)?.count || 0,
+        }));
+
+        // Prepare final review object
+        const reviews = {
+            average: parseFloat(average.toFixed(1)), // Rounded average rating to 1 decimal
+            totalCount: parseInt(totalCount), // Total count of reviews
+            counts,
+        };
+
         
-        res.json(product);
+        return res.status(200).json({reviews,product});
     } catch (error) {
         console.log(error)
         res.status(400).json(error)

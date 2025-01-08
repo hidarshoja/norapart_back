@@ -28,7 +28,7 @@ const ProductComment = (sequelize, DataTypes) => {
             allowNull: false,
         },
         rate:{
-            type: DataTypes.ENUM("0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"),
+            type: DataTypes.STRING,
             allowNull: false,
             defaultValue: '0',
         },
