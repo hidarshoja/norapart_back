@@ -122,3 +122,25 @@ export const getIncome = async (req,res) => {
         res.status(500).send('Internal Server Error');
     }
 }
+
+// ! get all options
+export const getAllOptions = async(req,res)=>{
+    try{
+        const options = await db.Option.findAll()
+        return res.status(200).json(options)
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error:e});
+    }
+}
+
+// ! get all options
+export const updateOptions = async(req,res)=>{
+    try{
+        const options = await db.Option.update(req.body)
+        return res.status(200).json(options)
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error:e});
+    }
+}

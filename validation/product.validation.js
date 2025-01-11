@@ -137,3 +137,12 @@ export const updateProductValidation = [
       .isString()
       .withMessage("جنس محصول از نوع عددی نیست."),
 ];
+
+
+export const offerValidation = [
+    body('products')
+        .isArray()
+        .withMessage('محصولات باید به صورت آرایه باشد')
+        .isLength({ min: 1 })
+        .withMessage('محصولات نباید خالی باشد')
+]

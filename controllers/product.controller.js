@@ -3,11 +3,12 @@ import { generateSlug } from '../libs/slug.js';
 import saveImages from '../libs/product.upload.js';
 import fs from 'fs'
 import { Sequelize, Op } from "sequelize";
+import moment from "moment-jalaali";
 
 
 export const index = async (req, res) => {
     try {
-        const { page = 1, limit = 10, all = false } = req.query;
+        const { page = 1, limit = 10, all = false, mode } = req.query;
 
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
@@ -42,7 +43,34 @@ export const index = async (req, res) => {
             ],
         };
 
-
+        if(mode === 'buy'){
+            const products = await db.Product.findAll({
+                order: [['buy_count', 'DESC']],
+                limit,
+                include: [
+                    {
+                        model: db.ProductImage,
+                        as: 'images',
+                        attributes: ['id', 'image_url']
+                    }
+                ]
+            })
+            return res.json(products);
+        }else if(mode === 'suggestion'){
+            const products = await db.Product.findAll({
+                where:{suggestion:'active'},
+                order:[['updatedAt','DESC']],
+                limit,
+                include: [
+                    {
+                        model: db.ProductImage,
+                        as: 'images',
+                        attributes: ['id', 'image_url']
+                    }
+                ]
+            })
+            return res.json(products);
+        }
         if (!all) {
             queryOptions.limit = limitNumber;
             queryOptions.offset = (pageNumber - 1) * limitNumber;
@@ -62,7 +90,6 @@ export const index = async (req, res) => {
         res.status(500).json({ message: 'Error fetching products', error: error.message });
     }
 };
-
 
 export const create = async (req, res) => {
     try {
@@ -159,7 +186,7 @@ export const show = async (req, res) => {
     }
 }
 
-// delete a product
+//! delete a product
 export const destroy = async(req,res)=>{
     try{
         const {slug} = req.params
@@ -198,7 +225,7 @@ export const destroy = async(req,res)=>{
     }
 }
 
-// edit a product
+//! edit a product
 export const update = async(req,res)=>{
     const {slug} = req.params
     const product = await db.Product.findOne({
@@ -260,4 +287,95 @@ export const destroyImage = async(req,res)=>{
     }catch (e) {
         console.log(e)
     }
+}
+
+// ! get all offers
+export const getOffers = async(req,res) =>{
+    try{
+        const now = new Date();
+        const persianNow = moment(now).format('jYYYY-jMM-jDD HH:mm:ss');
+        const gregorianNow = moment(persianNow, 'jYYYY-jMM-jDD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+        console.log('Persian Current Time:', gregorianNow);
+        const offers = await db.Suggestion.findOne({
+            where: {
+                expired_at: {
+                    [Op.gt]: persianNow,
+                }
+            },
+            attributes: ['id','expired_at'],
+            include: [
+                {
+                    model: db.SuggestionList,
+                    as: 'suggestion_list',
+                    attributes:['product_id'],
+                    include: [
+                        {
+                            model: db.Product,
+                            as:'product',
+                            attributes:['name','price','price_with_off','slug'],
+                            include:[
+                                {
+                                    model: db.ProductImage,
+                                    as: 'images',
+                                    attributes:['image_url'],
+                                }
+
+                            ]
+                        },
+                    ]
+                }
+            ]
+        })
+
+
+            return res.status(200).json(offers);
+
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error:e})
+    }
+}
+
+//! create offers
+export const createOffer = async(req,res)=>{
+    try {
+        const {products,expired_at}= req.body;
+        const now = new Date();
+        const isExists = await db.Suggestion.findOne({
+            where: {expired_at : {[Op.lt]: moment(now).format('YYYY-MM-DD HH:mm:ss')} }
+        })
+        if (isExists){
+            return res.status(400).json({msg: "شما از قبل یک پیشنهاد دارید"})
+        }
+        const suggestion = await db.Suggestion.create({expired_at})
+        for (const product of products) {
+            await db.SuggestionList.create({
+                product_id: product,
+                suggestion_id: suggestion?.id,
+            })
+        }
+        return res.status(200).json({msg:'آفر با موفقیت ایجاد شد'})
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error:e})
+    }
+
+}
+
+//! delete offers
+export const destroyOffer = async(req,res)=>{
+    try {
+        const {id}= req.params;
+         await db.SuggestionList.destroy({where:{suggest_id:id}})
+
+         await db.Suggestion.destroy({
+            where: {id }
+        })
+
+        return res.status(200).json({msg:'آفر با موفقیت حذف شد'})
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error:e})
+    }
+
 }

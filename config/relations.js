@@ -110,7 +110,23 @@ const defineRelations = (db) => {
     sourceKey: 'id',
     as: 'replies',
   });
+// ! suggestion relations
+  // SuggestionList belongs to a Suggestion
+  db.SuggestionList.belongsTo(db.Suggestion, {
+    foreignKey: "suggestion_id",
+    as: "suggestion",
+  });
 
+  db.Suggestion.hasMany(db.SuggestionList,{
+    foreignKey: 'suggestion_id',
+    as: "suggestion_list"
+  })
+
+  // SuggestionList belongs to a Product
+  db.SuggestionList.belongsTo(db.Product, {
+    foreignKey: "product_id",
+    as: "product",
+  });
 };
 
 export default defineRelations;

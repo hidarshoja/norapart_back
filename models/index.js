@@ -20,6 +20,10 @@ import BlogComment from "./BlogComment.js";
 import BlogReplyComment from "./BlogReplyComment.js";
 import ProductComment from "./ProductComment.js";
 import Contact from "./Contact.js";
+import Notification from './Notification.js';
+import Option from './Option.js';
+import Suggestion from "./Suggestion.js";
+import SuggestionList from "./SuggestionList.js";
 
 const conf = config.development;
 
@@ -54,7 +58,10 @@ db.BlogComment = BlogComment(sequelize, DataTypes)
 db.BlogReplyComment = BlogReplyComment(sequelize, DataTypes)
 db.ProductComment = ProductComment(sequelize, DataTypes)
 db.Contact = Contact(sequelize, DataTypes)
-
+db.Notification = Notification(sequelize, DataTypes)
+db.Option = Option(sequelize, DataTypes)
+db.Suggestion = Suggestion(sequelize, DataTypes)
+db.SuggestionList = SuggestionList(sequelize, DataTypes)
 // ! relations
 defineRelations(db)
 
