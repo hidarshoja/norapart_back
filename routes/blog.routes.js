@@ -9,6 +9,7 @@ const router = express.Router();
 router.get('/', index)
 router.get('/show/:blog_id', show)
 
+
 router.post('/', protectRoute,adminRoute,addBlogValidation,handleValidationErrors,create)
 
 router.patch('/:blog_id', protectRoute,adminRoute,updateBlogValidation,handleValidationErrors, update)

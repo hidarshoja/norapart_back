@@ -37,7 +37,8 @@ export const index = async (req, res) => {
                             model: db.User,
                             as: 'user',
                             attributes: ['id', 'first_name', 'last_name']
-                        }
+                        },
+
                     ]
                 }
             ],
@@ -46,13 +47,13 @@ export const index = async (req, res) => {
         if(mode === 'buy'){
             const products = await db.Product.findAll({
                 order: [['buy_count', 'DESC']],
-                limit,
+                limit: 4,
                 include: [
                     {
                         model: db.ProductImage,
                         as: 'images',
                         attributes: ['id', 'image_url']
-                    }
+                    },
                 ]
             })
             return res.json(products);
@@ -60,13 +61,34 @@ export const index = async (req, res) => {
             const products = await db.Product.findAll({
                 where:{suggestion:'active'},
                 order:[['updatedAt','DESC']],
-                limit,
+                limit:4,
                 include: [
                     {
                         model: db.ProductImage,
                         as: 'images',
                         attributes: ['id', 'image_url']
+                    },
+                    {
+                        model: db.Category,
+                        as: 'categories',
+                        attributes: ['id', 'name']
                     }
+                ]
+            })
+            return res.json(products);
+        }else if(mode==='offer'){
+            const products = await db.Product.findAll({
+                where:{price_with_off:{
+                        [Op.ne]: null
+                    }},
+                order:[['updatedAt','DESC']],
+                attributes:['id','name'],
+                include: [
+                    {
+                        model: db.ProductImage,
+                        as: 'images',
+                        attributes: ['id', 'image_url']
+                    },
                 ]
             })
             return res.json(products);
@@ -294,8 +316,6 @@ export const getOffers = async(req,res) =>{
     try{
         const now = new Date();
         const persianNow = moment(now).format('jYYYY-jMM-jDD HH:mm:ss');
-        const gregorianNow = moment(persianNow, 'jYYYY-jMM-jDD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
-        console.log('Persian Current Time:', gregorianNow);
         const offers = await db.Suggestion.findOne({
             where: {
                 expired_at: {
@@ -312,12 +332,12 @@ export const getOffers = async(req,res) =>{
                         {
                             model: db.Product,
                             as:'product',
-                            attributes:['name','price','price_with_off','slug'],
+                            attributes:['id','name','price','price_with_off','slug'],
                             include:[
                                 {
                                     model: db.ProductImage,
                                     as: 'images',
-                                    attributes:['image_url'],
+                                    attributes:['id','image_url'],
                                 }
 
                             ]
@@ -366,7 +386,7 @@ export const createOffer = async(req,res)=>{
 export const destroyOffer = async(req,res)=>{
     try {
         const {id}= req.params;
-         await db.SuggestionList.destroy({where:{suggest_id:id}})
+         await db.SuggestionList.destroy({where:{suggestion_id:id}})
 
          await db.Suggestion.destroy({
             where: {id }
