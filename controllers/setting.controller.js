@@ -137,8 +137,34 @@ export const getAllOptions = async(req,res)=>{
 // ! get all options
 export const updateOptions = async(req,res)=>{
     try{
-        const options = await db.Option.update(req.body)
+        const updates = req.body; // Expecting an array of objects
+        if (!Array.isArray(updates) || updates.length === 0) {
+            return res.status(400).json({ error: "مقدار خالی است" });
+        }
+
+        const options = updates.map((update) => {
+
+
+            return db.Option.update(update, {
+                where: { key: update.key },
+            });
+        });
         return res.status(200).json(options)
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error:e});
+    }
+}
+
+// ! get by keys
+export const getByKey = async (req,res)=>{
+    const {key} = req.params;
+    try {
+        const option = await db.Option.findOne({where: {key}})
+        if (!option) {
+            return  res.status(404).json({msg:'تنظیمات یافت نشد'})
+        }
+        return res.status(200).json(option)
     }catch (e) {
         console.log(e)
         return res.status(500).json({error:e});

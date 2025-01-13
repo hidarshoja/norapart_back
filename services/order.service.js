@@ -1,4 +1,5 @@
 import db from "../models/index.js";
+import axios from "axios";
 
 export const getAllOrders = async(db)=>{
     const totalPrices = await db.TotalPrice.findAll({
@@ -52,6 +53,34 @@ export const getAllOrders = async(db)=>{
     return totalPrices
 }
 
+export const showOrderById = async (db,params)=>{
+    const {user_id,mode} = params;
+    const orders = await db.TotalPrice.findAll({
+        order: [['createdAt', 'desc']],
+        include: [
+            {
+                model: db.Address,
+                as: 'address', // Alias for the Address model
+                attributes: ['id', 'statuse', 'createdAt', 'ref_code'],
+                where: {statuse: mode, user_id : user_id}
+            },
+            {
+                model: db.Order,
+                as: 'orders', // Alias for the Order model
+                attributes: [ 'amount', 'price'], // Include order fields
+                include: [
+                    {
+                        model: db.Product, // Product model
+                        as: 'product', // Alias for Product
+                        attributes: ['id', 'name'], 
+                    },
+                ],
+            },
+        ]
+    })
+    return orders
+}
+
 //! create an orders
 export const createOrders = async (db,body) =>{
     const {formData,cart:carts,total_price,user_id} = body
@@ -73,7 +102,8 @@ export const createOrders = async (db,body) =>{
         city_id : formData.city_id,
         address : formData.address,
         phone : formData.phone === '' ? null : formData.phone,
-        postal_code : formData.postal_code
+        postal_code : formData.postal_code,
+        statuse: 'پرداخت'
     })
 
     await  db.TotalPrice.update({address_id:address.id},{
@@ -81,4 +111,6 @@ export const createOrders = async (db,body) =>{
             id : total_price_db.id
         }
     })
+    return address.id
+
 }

@@ -24,6 +24,7 @@ import Notification from './Notification.js';
 import Option from './Option.js';
 import Suggestion from "./Suggestion.js";
 import SuggestionList from "./SuggestionList.js";
+import Payment from "./Payment.js";
 
 const conf = config.development;
 
@@ -62,6 +63,8 @@ db.Notification = Notification(sequelize, DataTypes)
 db.Option = Option(sequelize, DataTypes)
 db.Suggestion = Suggestion(sequelize, DataTypes)
 db.SuggestionList = SuggestionList(sequelize, DataTypes)
+db.Payment = Payment(sequelize, DataTypes)
+
 // ! relations
 defineRelations(db)
 

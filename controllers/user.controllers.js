@@ -38,6 +38,22 @@ export const index = async (req, res) => {
     }
 }
 
+// ! get single user
+export const show = async (req, res) => {
+    try{
+        const {user_id} = req.params;
+        const user= await db.User.findByPk(user_id);
+
+        if (!user) {
+            return res.status(404).send({error:"کاربری یافت نشد"});
+        }
+        return res.status(200).json(user)
+    }catch(err){
+        console.log(err);
+        res.status(500).send({error:err.message});
+    }
+}
+
 // ! change active or inactive a user
 export const changeStatus = async (req, res) => {
     const {user_id} = req.params;
