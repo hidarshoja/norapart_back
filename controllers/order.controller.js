@@ -100,7 +100,7 @@ export const verify = async(req,res) =>{
             card_pan,
             ref_id,
             fee,
-            amount:Number(amount) * 10,
+            amount:amount,
             authority
         })
         // TODO send sms to admin

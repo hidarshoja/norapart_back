@@ -59,7 +59,12 @@ export const index = async (req, res) => {
             return res.json(products);
         }else if(mode === 'suggestion'){
             const products = await db.Product.findAll({
-                where:{suggestion:'active'},
+                where: {
+                    suggestion: 'active',
+                    amount: {
+                        [Op.gt]: 0 // Check if amount is greater than 0
+                    }
+                },
                 order:[['updatedAt','DESC']],
                 limit:4,
                 include: [

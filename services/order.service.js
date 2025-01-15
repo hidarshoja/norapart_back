@@ -94,6 +94,11 @@ export const createOrders = async (db,body) =>{
             total_price_id:total_price_db.id,
             price:cart.price
         })
+        const products = await db.Product.findByPk(cart.product_id)
+        products.update({
+            amount: Number(products.amount) - 1,
+            buy_count: Number(products.buy_count) + 1
+        })
     }
 
     const address= await db.Address.create({
