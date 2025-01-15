@@ -62,7 +62,7 @@ export const showOrderById = async (db,params)=>{
                 model: db.Address,
                 as: 'address', // Alias for the Address model
                 attributes: ['id', 'statuse', 'createdAt', 'ref_code'],
-                where: {statuse: mode, user_id : user_id}
+                where: { user_id : user_id}
             },
             {
                 model: db.Order,

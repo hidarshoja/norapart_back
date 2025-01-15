@@ -25,14 +25,14 @@ export const createOrdersValidation = [
 
     body("formData.postal_code")
         .trim()
-        .notEmpty()
-        .withMessage("کدپستی را وارد کنید")
+        .optional()
         .isLength({ min: 10, max: 10 }).withMessage("کدپستی باید 10 رقم باشد")
         .matches(/^[0-9]+$/).withMessage("کدپستی باید فقط شامل اعداد باشد"),
 
 
     body("formData.phone")
         .trim()
+        .optional()
         .isLength({ min: 11, max: 11 }).withMessage("شماره تلفن باید 11 رقم باشد")
         .matches(/^[0-9]+$/).withMessage("شماره تلفن باید فقط شامل اعداد باشد"),
 ];
