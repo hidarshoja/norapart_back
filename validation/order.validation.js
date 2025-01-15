@@ -23,18 +23,7 @@ export const createOrdersValidation = [
         .isString()
         .withMessage("آدرس رو به صورت حروف وارد کنید"),
 
-    body("formData.postal_code")
-        .trim()
-        .optional()
-        .isLength({ min: 10, max: 10 }).withMessage("کدپستی باید 10 رقم باشد")
-        .matches(/^[0-9]+$/).withMessage("کدپستی باید فقط شامل اعداد باشد"),
 
-
-    body("formData.phone")
-        .trim()
-        .optional()
-        .isLength({ min: 11, max: 11 }).withMessage("شماره تلفن باید 11 رقم باشد")
-        .matches(/^[0-9]+$/).withMessage("شماره تلفن باید فقط شامل اعداد باشد"),
 ];
 
 export const refUpdateOrderValidation = [
