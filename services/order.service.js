@@ -72,7 +72,7 @@ export const showOrderById = async (db,params)=>{
                     {
                         model: db.Product, // Product model
                         as: 'product', // Alias for Product
-                        attributes: ['id', 'name'], 
+                        attributes: ['id', 'name', 'price_with_off','price'],
                     },
                 ],
             },

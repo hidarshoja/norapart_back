@@ -50,7 +50,7 @@ const Address = (sequelize, DataTypes) => {
             allowNull: true,
         },
         statuse: {
-            type: DataTypes.ENUM("ثبت","پرداخت","پرداخت ناموفق","درحال پردازش","لغو","ارسال شد"),
+            type: DataTypes.ENUM("ثبت","پرداخت","پرداخت ناموفق","درحال پردازش","لغو","ارسال شد","مرجوع شده"),
             allowNull: false,
             defaultValue: "ثبت",
         }

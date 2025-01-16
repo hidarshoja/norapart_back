@@ -49,4 +49,8 @@ export const changePasswordValidation = [
     body("password")
         .trim()
         .isLength({ min: 6, max: 20 }).withMessage("رمز عبور باید بین 6 تا 20 کاراکتر باشد"),
+    body("oldPassword")
+        .trim()
+        .notEmpty()
+        .withMessage('رمز قدیمی را وارد کنید')
 ]

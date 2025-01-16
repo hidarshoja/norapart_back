@@ -34,6 +34,39 @@ export const index = async(req, res) => {
     }
 }
 
+export const show = async(req,res)=> {
+    const{user_id} = req.params;
+    if (!user_id) {
+        return res.status(400).json({ error: "لطفا آیدی کاربر را ارسال کنید" });
+    }
+    try{
+        const comments = await db.ProductComment.findAll({
+            order:  [['createdAt','desc']],
+            where: {
+                user_id: user_id,
+            },
+            include: [
+                {
+                model: db.Product,
+                as:'product',
+                attributes: ['name']
+                },
+            ]
+        })
+        if (!comments.length) {
+            return res.status(404).json({ message: "کامنتی یافت نشد" });
+        }
+
+        return res.status(200).json(comments)
+    }catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            error: "Internal server error",
+            details: process.env.NODE_ENV === "development" ? error.message : undefined,
+        });
+    }
+}
+
 export const create = async(req, res) => {
     console.log(req.body)
     try {

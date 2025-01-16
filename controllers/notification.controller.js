@@ -3,12 +3,20 @@ import db from '../models/index.js';
 export const index = async (req,res)=>{
     const {limit} = req.query;
     try {
-       if (!limit) {
-           const notifications = await db.Notification.findAll();
-           return res.status(200).json(notifications)
-       }
-        const notifications = await db.Notification.findAll({limit:limit});
-        return res.status(200).json(notifications)
+        const queryOptions = {};
+
+        if (limit) {
+            const parsedLimit = parseInt(limit, 10);
+
+            if (isNaN(parsedLimit) || parsedLimit <= 0) {
+                return res.status(400).json({ error: "Limit must be a positive number." });
+            }
+
+            queryOptions.limit = parsedLimit;
+        }
+
+        const notifications = await db.Notification.findAll(queryOptions);
+        return res.status(200).json(notifications);
 
     }catch (e) {
         console.log(e)

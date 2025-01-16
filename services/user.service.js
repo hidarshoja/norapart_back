@@ -8,7 +8,7 @@ export const userExist = async (phone) => {
 }
 
 export const userExistById = async (id) => {
-    const user = await db.User.findOne({ where: { id }, attributes: {exclude:['password','createdAt','updatedAt']} });
+    const user = await db.User.findOne({ where: { id }, attributes: {exclude:['createdAt','updatedAt']} });
     return user;
 }
 

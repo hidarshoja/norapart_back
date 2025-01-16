@@ -6,11 +6,11 @@ import {handleValidationErrors} from "../middlewares/validate.middleware.js";
 const router = express.Router();
 
 router.get('/', protectRoute,adminRoute,index)
-router.get('/:user_id', protectRoute,adminRoute,show)
+router.get('/:user_id', protectRoute,show)
 
 router.patch('/:user_id/change-status', protectRoute,adminRoute,changeStatus)
 router.patch('/:user_id/change-password', protectRoute,changePasswordValidation,handleValidationErrors,changePassword)
 router.patch('/:user_id/change-profile', protectRoute,updateUserValidation,handleValidationErrors,changeProfile)
-router.patch('/:user_id/change-role', protectRoute,changeRole)
+router.patch('/:user_id/change-role', protectRoute,adminRoute,changeRole)
 
 export default router;

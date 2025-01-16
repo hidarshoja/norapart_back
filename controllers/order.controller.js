@@ -109,3 +109,21 @@ export const verify = async(req,res) =>{
         console.log(e)
     }
 }
+
+//! cancel or return a product
+export const cancel = async(req,res)=> {
+
+    try {
+        await db.Request.create(req.body)
+        db.Address.update({statuse: req.body.status},{
+            where:{
+                id:req.body.address_id
+            }
+        })
+        return res.status(200).json({msg: 'درخواست شما با موفقیت ثبت گردید'})
+    }catch (e) {
+        console.log(e)
+        return res.status(500).json({error: e})
+    }
+
+}

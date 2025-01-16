@@ -79,10 +79,16 @@ export const changeStatus = async (req, res) => {
 export const changePassword = async (req, res) => {
     const {user_id} = req.params;
     try{
-        const user = await userExistById(user_id)
+        const user = await userExistById(user_id);
         if (!user) {
-            return res.status(404).json({message: 'کاربری یافت نشد'})
+            return res.status(404).json({ message: 'کاربری یافت نشد' });
         }
+
+        const isPasswordMatch = await bcrypt.compare(req.body.oldPassword, user.password);
+        if (!isPasswordMatch) {
+            return res.status(402).json({ message: 'رمز فعلی نادرست است' });
+        }
+
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password, salt);
 

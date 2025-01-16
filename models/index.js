@@ -25,6 +25,7 @@ import Option from './Option.js';
 import Suggestion from "./Suggestion.js";
 import SuggestionList from "./SuggestionList.js";
 import Payment from "./Payment.js";
+import Request from "./Request.js";
 
 const conf = config.development;
 
@@ -64,6 +65,7 @@ db.Option = Option(sequelize, DataTypes)
 db.Suggestion = Suggestion(sequelize, DataTypes)
 db.SuggestionList = SuggestionList(sequelize, DataTypes)
 db.Payment = Payment(sequelize, DataTypes)
+db.Request = Request(sequelize, DataTypes)
 
 // ! relations
 defineRelations(db)

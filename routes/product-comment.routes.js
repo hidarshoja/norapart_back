@@ -1,5 +1,5 @@
 import express from 'express';
-import {create, destroy, index, update} from "../controllers/product-comment.controller.js";
+import {create, destroy, index, update, show} from "../controllers/product-comment.controller.js";
 import {adminRoute, protectRoute} from "../middlewares/auth.middleware.js";
 import {handleValidationErrors} from "../middlewares/validate.middleware.js";
 import {productCommentValidation} from "../validation/product-comment.validation.js";
@@ -7,6 +7,7 @@ import {productCommentValidation} from "../validation/product-comment.validation
 const router = express.Router();
 
 router.get('/', protectRoute,adminRoute,index)
+router.get('/:user_id', protectRoute,show)
 
 router.post('/',protectRoute, productCommentValidation,handleValidationErrors,create)
 
