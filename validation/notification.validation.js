@@ -39,7 +39,7 @@ export const updateNotificationValidate = [
     (req, res, next) => {
         // Check for unknown fields
         const unknownFields = Object.keys(req.body).filter(
-            (key) => !allowedFieldsReply.includes(key)
+            (key) => !allowedFields.includes(key)
         );
 
         if (unknownFields.length > 0) {
