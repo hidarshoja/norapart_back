@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 // ! register a new user
 export const signup = async (req, res) => {
     try {
-        const userExists = await userExist(req.body.phone);
+        const userExists = await userExist(req.body.email);
 
         if (userExists) {
             return res.status(400).json({ message: "کاربری با این شماره قبلا ثبت شده است" });
@@ -14,11 +14,9 @@ export const signup = async (req, res) => {
 
         const user = await createNewUser(req.body);
 
-        // authenticate
+        //* authenticate
         const { accessToken, refreshToken } = generateTokens(user.phone);
-        // await storeRefreshToken(user.id, refreshToken);
-
-        // setCookies(res, accessToken, refreshToken);
+      
 
         res.status(201).json({
             message: "کاربر با موفقیت ایجاد شد",

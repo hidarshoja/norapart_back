@@ -104,7 +104,6 @@ export const index = async (req, res) => {
         }
 
         const products = await db.Product.findAndCountAll(queryOptions);
-
         return res.json({
             products: products.rows,
             totalCount: products.count,

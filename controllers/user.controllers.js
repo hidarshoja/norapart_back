@@ -17,6 +17,7 @@ export const index = async (req, res) => {
         const offset = (page - 1) * limit;
 
         const { rows: users, count: total } = await db.User.findAndCountAll({
+            order: [['id', 'DESC']],
             offset: parseInt(offset, 10),
             limit: parseInt(limit, 10),
             where:{id: {[Op.ne]: user_id}},
