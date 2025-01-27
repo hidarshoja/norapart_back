@@ -20,9 +20,9 @@ export const addContactValidation = [
         next(); // Proceed to field-specific validations
     },
 
-    body("name")
+    body("username")
         .trim()
-        .notEmpty().withMessage("نام نمی‌تواند خالی باشد")
+        .optional()
         .isString().withMessage("نام باید از نوع رشته باشد"),
 
     body("body")

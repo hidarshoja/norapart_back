@@ -5,7 +5,9 @@ import {Op} from "sequelize";
 
 // ! get all users info
 export const index = async (req, res) => {
-    const { page=1,limit=10,all=false } = req.params;
+    console.log(req.query)
+    const { page=1,limit=10,all=false } = req.query;
+
     const user_id = req.user.id;
     const attributes = { exclude: ['password','createdAt','updatedAt'] };
     try{
