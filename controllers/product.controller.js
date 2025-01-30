@@ -107,7 +107,7 @@ export const index = async (req, res) => {
         return res.json({
             products: products.rows,
             totalCount: products.count,
-            totalPages: all ? 1 : Math.ceil(products.count / limitNumber),
+            totalPages: all ? 1 : Math.ceil((products.count-1) / limitNumber),
             currentPage: all ? 1 : pageNumber,
             limit: all ? products.count : limitNumber,
         });
