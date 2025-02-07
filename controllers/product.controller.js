@@ -21,7 +21,7 @@ export const index = async (req, res) => {
                     model: db.Category,
                     as: 'categories',
                     attributes: ['id', 'name'],
-                    where: categoryId !=='0' ? { id: categoryId } : undefined, // Filter by category if provided
+                    where: categoryId !=='0' && categoryId ? { id: categoryId } : undefined, // Filter by category if provided
                 },
                 {
                     model: db.ProductImage,
@@ -46,7 +46,7 @@ export const index = async (req, res) => {
         };
 
         // Filter by machine if provided
-        if (brand !== '') {
+        if (brand !== '' && brand) {
             queryOptions.where = {
                 ...queryOptions.where,
                 brand: brand,
@@ -54,7 +54,7 @@ export const index = async (req, res) => {
         }
 
         // Apply price filters (low price, high price, best sellers)
-        if (priceFilter !== '') {
+        if (priceFilter !== '' && priceFilter) {
             if (priceFilter === 'cheap') {
                 queryOptions.order = [['price', 'ASC']];
             } else if (priceFilter === 'expensive') {
