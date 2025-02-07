@@ -8,43 +8,71 @@ import moment from "moment-jalaali";
 
 export const index = async (req, res) => {
     try {
-        const { page = 1, limit = 10, all = false, mode } = req.query;
+        const { page = 1, limit = 10, all = false, mode, categoryId, brand, priceFilter } = req.query;
 
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
+        // Base query options
         const queryOptions = {
             order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: db.Category,
                     as: 'categories',
-                    attributes: ['id', 'name']
+                    attributes: ['id', 'name'],
+                    where: categoryId !=='0' ? { id: categoryId } : undefined, // Filter by category if provided
                 },
                 {
                     model: db.ProductImage,
                     as: 'images',
-                    attributes: ['id', 'image_url']
+                    attributes: ['id', 'image_url'],
                 },
                 {
                     model: db.ProductComment,
                     as: 'comments',
                     attributes: ['id', 'body', 'rate', 'createdAt'],
                     where: { status: 'published' },
-                    required: false, // Allow products with no published comments
+                    required: false,
                     include: [
                         {
                             model: db.User,
                             as: 'user',
-                            attributes: ['id', 'first_name', 'last_name']
+                            attributes: ['id', 'first_name', 'last_name'],
                         },
-
-                    ]
-                }
+                    ],
+                },
             ],
         };
 
-        if(mode === 'buy'){
+        // Filter by machine if provided
+        if (brand !== '') {
+            queryOptions.where = {
+                ...queryOptions.where,
+                brand: brand,
+            };
+        }
+
+        // Apply price filters (low price, high price, best sellers)
+        if (priceFilter !== '') {
+            if (priceFilter === 'cheap') {
+                queryOptions.order = [['price', 'ASC']];
+            } else if (priceFilter === 'expensive') {
+                queryOptions.order = [['price', 'DESC']];
+            } else if (priceFilter === 'popular') {
+                queryOptions.order = [['buy_count', 'DESC']];
+            }
+        }
+
+
+        // Handle pagination
+        if (!all) {
+            queryOptions.limit = limitNumber;
+            queryOptions.offset = (pageNumber - 1) * limitNumber;
+        }
+
+        // Handling different modes (buy, suggestion, offer)
+        if (mode === 'buy') {
             const products = await db.Product.findAll({
                 order: [['buy_count', 'DESC']],
                 limit: 4,
@@ -52,62 +80,62 @@ export const index = async (req, res) => {
                     {
                         model: db.ProductImage,
                         as: 'images',
-                        attributes: ['id', 'image_url']
+                        attributes: ['id', 'image_url'],
                     },
-                ]
-            })
+                ],
+            });
             return res.json(products);
-        }else if(mode === 'suggestion'){
+        } else if (mode === 'suggestion') {
             const products = await db.Product.findAll({
                 where: {
                     suggestion: 'active',
                     amount: {
-                        [Op.gt]: 0 // Check if amount is greater than 0
-                    }
+                        [Op.gt]: 0,
+                    },
                 },
-                order:[['updatedAt','DESC']],
-                limit:4,
+                order: [['updatedAt', 'DESC']],
+                limit: 4,
                 include: [
                     {
                         model: db.ProductImage,
                         as: 'images',
-                        attributes: ['id', 'image_url']
+                        attributes: ['id', 'image_url'],
                     },
                     {
                         model: db.Category,
                         as: 'categories',
-                        attributes: ['id', 'name']
-                    }
-                ]
-            })
+                        attributes: ['id', 'name'],
+                    },
+                ],
+            });
             return res.json(products);
-        }else if(mode==='offer'){
+        } else if (mode === 'offer') {
             const products = await db.Product.findAll({
-                where:{price_with_off:{
-                        [Op.ne]: null
-                    }},
-                order:[['updatedAt','DESC']],
-                attributes:['id','name'],
+                where: {
+                    price_with_off: {
+                        [Op.ne]: null,
+                    },
+                },
+                order: [['updatedAt', 'DESC']],
+                attributes: ['id', 'name'],
                 include: [
                     {
                         model: db.ProductImage,
                         as: 'images',
-                        attributes: ['id', 'image_url']
+                        attributes: ['id', 'image_url'],
                     },
-                ]
-            })
+                ],
+            });
             return res.json(products);
         }
-        if (!all) {
-            queryOptions.limit = limitNumber;
-            queryOptions.offset = (pageNumber - 1) * limitNumber;
-        }
 
+        // Default behavior (get all products with pagination)
         const products = await db.Product.findAndCountAll(queryOptions);
+
         return res.json({
             products: products.rows,
             totalCount: products.count,
-            totalPages: all ? 1 : Math.ceil((products.count-1) / limitNumber),
+            totalPages: all ? 1 : Math.ceil((products.count - 1) / limitNumber),
             currentPage: all ? 1 : pageNumber,
             limit: all ? products.count : limitNumber,
         });
@@ -116,6 +144,7 @@ export const index = async (req, res) => {
         res.status(500).json({ message: 'Error fetching products', error: error.message });
     }
 };
+
 
 export const create = async (req, res) => {
     try {
