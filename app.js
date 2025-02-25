@@ -18,7 +18,7 @@ import commentRoutes from "./routes/comment.routes.js";
 import ProductCommentRoutes from "./routes/product-comment.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
-
+import torobProductRoutes from "./routes/torob.routes.js";
 
 
 dotenv.config();
@@ -62,6 +62,7 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/product-comment", ProductCommentRoutes);
 app.use("/api/contact", contactRoutes);
 app.use('/api/notification',notificationRoutes)
+app.use('/api/v1/torob',torobProductRoutes)
 // ! start server
 const PORT = process.env.PORT || 5000;
 db.sequelize.sync().then(() => {
