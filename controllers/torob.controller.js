@@ -25,7 +25,7 @@ export const index = async(req, res) => {
     const newProducts = products.map(product => ({
         title: product.name,
         page_unique: product.id,
-        current_price: product.price_with_off ?? product.price,
+        current_price: !product.price_with_off || product.price_with_off === '' ? product.price : product.price_with_off,
         old_price: product.price,
         availability: product.amount > 0 ? "instock" : "outofstock",
         category_name:  product.categories.name,
@@ -62,7 +62,7 @@ export const show = async(req, res) => {
         title: product.name,
         subtitle: product.name,
         page_unique: product.id,
-        current_price: product.price_with_off ?? product.price,
+        current_price: !product.price_with_off || product.price_with_off === '' ? product.price : product.price_with_off,
         old_price: product.price,
         availability: product.amount > 0 ? "instock" : "outofstock",
         category_name:  product.categories.name,
