@@ -46,7 +46,7 @@ export const index = async (req, res) => {
             category_name: product.categories.name || "",
             image_link: `${process.env.BACKEND_URL}${product.images[0].image_url}`,
             image_links: product.images.map(image => `${process.env.BACKEND_URL}${image.image_url}`),
-            page_url: `${process.env.FRONTEND_URL}/product/${product.slug}/`,
+            page_url: `${process.env.FRONTEND_URL}/shop/${product.slug}/`,
         };
 
         return res.status(200).json({
@@ -86,7 +86,7 @@ export const index = async (req, res) => {
         category_name: product.categories.name || "",
         image_link: `${process.env.BACKEND_URL}${product.images[0].image_url}`,
         image_links: product.images.map(image => `${process.env.BACKEND_URL}${image.image_url}`),
-        page_url: `${process.env.FRONTEND_URL}/product/${product.slug}/`,
+        page_url: `${process.env.FRONTEND_URL}/shop/${product.slug}/`,
     }));
 
     res.status(200).json({
